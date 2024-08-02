@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafanavk
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: grafanavk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafanavk
+  template:
+    metadata:
+      labels:
+        app: grafanavk
+    spec:
+      initContainers:
+      - name: init
+        image: grafana/tempo:latest
+        command: ["chown", "10001:10001", "/var/tempo"]
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: tempo-data
+          mountPath: /var/tempo
+      containers:
+      - name: tempo
+        image: grafana/tempo:latest
+        args: ["-config.file=/etc/tempo.yaml"]
+        ports:
+        - containerPort: 9095
+        - containerPort: 4317
+        - containerPort: 4318
+        - containerPort: 4319
+        - containerPort: 3200
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/tempo.yaml
+          subPath: tempo.yaml
+        - name: tempo-data
+          mountPath: /var/tempo
+      - name: grafanavk
+        image: grafana/grafana:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_SERVER_HTTP_ADDR
+          value: "0.0.0.0"
+        - name: GF_PROVISIONING_ENABLED
+          value: "true"
+        - name: GF_DASHBOARDS_JSON_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: grafanadashboardhttp
+          mountPath: /etc/grafana/provisioning/dashboards/dashboardHTTP.json
+          subPath: dashboardHTTP.json
+          readOnly: false
+        - name: grafanadashboardk8s
+          mountPath: /etc/grafana/provisioning/dashboards/dashboardK8S.json
+          subPath: dashboardK8S.json
+          readOnly: false
+        - mountPath: /etc/grafana/provisioning/datasources
+          name: grafana-datasources
+          readOnly: false
+        - name: grafana-dashboard-providers
+          mountPath: /etc/grafana/provisioning/dashboards/provider.yaml
+          subPath: provider.yaml
+        - name: grafana-config
+          mountPath: /etc/grafana/grafana.ini
+          subPath: grafana.ini
+      volumes:
+      - name: config-volume
+        configMap:
+          name: tempo-config
+      - name: tempo-data
+        hostPath:
+          path: /tmp
+          type: Directory
+      - name: grafana-dashboard-providers
+        configMap:
+          name: grafana-dashboard-providers
+      - name: grafana-datasources
+        configMap:
+          defaultMode: 420
+          name: my-grafana-datasources
+      - name: grafanadashboardhttp
+        configMap:
+          name: grafanadashboardhttp
+      - name: grafanadashboardk8s
+        configMap:
+          name: grafanadashboardk8s
+      - name: grafana-config
+        configMap:
+          name: grafana-config

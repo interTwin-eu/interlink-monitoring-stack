@@ -1,0 +1,25 @@
+services:
+  tempo:
+    name: tempo-service # do not change if you don't know what you are doing
+    port: 4317 # do not change if you don't know what you are doing
+  
+  grafanavk:
+    name: grafana-service # do not change if you don't know what you are doing
+    port: 3000 # do not change if you don't know what you are doing
+
+app:
+  name: grafanavk
+
+ingresses:
+  tempo:
+    host: tempo.131.154.98.206.myip.cloud.infn.it # change this to your desired hostname
+  
+  grafana:
+    host: grafanavk.131.154.98.206.myip.cloud.infn.it # change this to your desired hostname
+
+config:
+  grafana:
+    admin_user: admin # change this to your desired username
+    admin_password: admin # change this to your desired password
+    http_port: 3000 # do not change if you don't know what you are doing
+    http_addr: 0.0.0.0 # do not change if you don't know what you are doing

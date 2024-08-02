@@ -1,0 +1,8 @@
+apiVersion: v2
+name: helm-vk-monitoring
+description: A helm chart to deploy a Grafana dashboard for monitoring VK
+
+type: application
+
+version: 0.1.0
+appVersion: "0.1.0"
