@@ -70,7 +70,7 @@ To install the monitoring system, follow the steps below:
 1. Clone the repository:
 
 ```bash
-git clone 
+git clone https://github.com/interTwin-eu/interlink-monitoring-stack
 ```
 
 2. Change the values in the `values.yaml` file to match your environment. 
@@ -82,10 +82,10 @@ kubectl create namespace interlink-mon
 4. Install the monitoring system using the following command:
 
 ```bash
-helm upgrade --install helm-vk-monitoring-release helm-vk-monitoring/ -n interlink-mon --debug
+helm upgrade --install helm-vk-monitoring-release interlink-monitoring-stack/ -n interlink-mon --debug
 ```
 
-5. Access Grafana dashboard through the Ingress IP address you defined in the `values.yaml` file with the credentials you defined in the `values.yaml` file. 
+5. Access Grafana dashboard through the domain you defined in the `values.yaml` file with the credentials you defined in the `values.yaml` file. 
 
 The following image shows the Grafana dashboard:
 
