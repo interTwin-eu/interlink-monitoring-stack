@@ -146,7 +146,7 @@ data:
                 }
               ],
               "limit": 100000,
-              "query": "{name=\"CreateHttpCall\" && resource.service.name=\"InterLink-service\" && .exit.code=200 } | select(span.duration)",
+              "query": "{name=\"CreateHttpCall\" && resource.service.name=\"InterLink-service\" && .exit.code=200 }",
               "queryType": "traceql",
               "refId": "A",
               "tableType": "spans"
@@ -3078,7 +3078,7 @@ data:
                 }
               ],
               "limit": 100000,
-              "query": "{name=\"PingHttpCall\" && resource.service.name=\"InterLink-service\" && .exit.code=200 }",
+              "query": "{name=\"PingHttpCall\" && resource.service.name=\"InterLink-service\" && .exit.code!=200 }",
               "queryType": "traceql",
               "refId": "A",
               "tableType": "spans"
