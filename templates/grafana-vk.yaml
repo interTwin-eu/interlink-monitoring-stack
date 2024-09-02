@@ -56,6 +56,10 @@ spec:
           mountPath: /etc/grafana/provisioning/dashboards/dashboardHTTP.json
           subPath: dashboardHTTP.json
           readOnly: false
+        - name: grafanadashboardhttpfailed
+          mountPath: /etc/grafana/provisioning/dashboards/dashboardHTTPFailed.json
+          subPath: dashboardHTTPFailed.json
+          readOnly: false
         - name: grafanadashboardk8s
           mountPath: /etc/grafana/provisioning/dashboards/dashboardK8S.json
           subPath: dashboardK8S.json
@@ -87,6 +91,9 @@ spec:
       - name: grafanadashboardhttp
         configMap:
           name: grafanadashboardhttp
+      - name: grafanadashboardhttpfailed
+        configMap:
+          name: grafanadashboardhttpfailed
       - name: grafanadashboardk8s
         configMap:
           name: grafanadashboardk8s
