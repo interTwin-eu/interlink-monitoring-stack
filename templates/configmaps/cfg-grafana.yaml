@@ -27,6 +27,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
+      "id": 2,
       "links": [],
       "liveNow": true,
       "panels": [
@@ -1986,6 +1987,7 @@ data:
         },
         {
           "datasource": {
+            "default": true,
             "type": "tempo",
             "uid": "1"
           },
@@ -2050,7 +2052,7 @@ data:
                   "scope": "span",
                   "tag": "name",
                   "value": [
-                    "StatusHttpCall"
+                    "LogHttpCall"
                   ],
                   "valueType": "string"
                 },
@@ -2071,8 +2073,8 @@ data:
                 }
               ],
               "limit": 100000,
-              "query": "{name=\"CreateHttpCall\" && resource.service.name=\"InterLink-service\" && .exit.code=200 }",
-              "queryType": "traceqlSearch",
+              "query": "{name=\"LogHttpCall\" && resource.service.name=\"InterLink-service\" && .exit.code=200 }",
+              "queryType": "traceql",
               "refId": "A",
               "tableType": "spans"
             }
