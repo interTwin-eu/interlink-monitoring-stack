@@ -12,12 +12,12 @@ app:
 
 ingresses:
   tempo:
-    host: tempo.131.154.98.184.myip.cloud.infn.it # change this to your desired hostname
+    host: tempo.131.154.99.250.myip.cloud.infn.it # change this to your desired hostname
     port: 443 # external port where the service is exposed
-    auth_enabled: false
+    mTLSEnabled: false
   
   grafana:
-    host: grafanavk.131.154.98.184.myip.cloud.infn.it # change this to your desired hostname
+    host: grafanavk.131.154.99.250.myip.cloud.infn.it # change this to your desired hostname
 
 config:
   grafana:
@@ -25,14 +25,23 @@ config:
     admin_password: password # change this to your desired password. This is the password you will use to login to Grafana
     http_port: 3000 # do not change if you don't know what you are doing
     http_addr: 0.0.0.0 # do not change if you don't know what you are doing
+
+    # services_VK-InterLink:
+    #   - VK-InterLink-67271c82-d19b-41cf-b937-e7f5fcd7349d
+
+    # #services_InterLink-Plugin:
+    # #  - InterLink-Plugin-67271c82-d19b-41cf-b937-e7f5fcd7349d
+
+    # #services_Plugin:
+    # #  - Plugin-67271c82-d19b-41cf-b937-e7f5fcd7349d
+   
     service_name: VK-InterLink-67271c82-d19b-41cf-b937-e7f5fcd7349d
 
 auth:
   tempo:
-    mTLS_enabled: true
+    mTLSEnabled: false
     clientCA: |-
       -----BEGIN CERTIFICATE-----
-      paste your client CA certificate here
       -----END CERTIFICATE-----
 
 maintainerEmail: "gibianch@pg.infn.it"
