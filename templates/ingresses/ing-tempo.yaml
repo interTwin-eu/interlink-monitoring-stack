@@ -56,7 +56,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name:  {{ .Values.services.tempo.name }}
+                name:  {{ .Values.services.tempo_collector.name }}
                 port:
                   number: {{ .Values.ingresses.tempo.port }}
       host: {{ .Values.ingresses.tempo.host }}

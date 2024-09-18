@@ -1,7 +1,11 @@
 services:
-  tempo:
+  tempo_collector:
     name: tempo-service # do not change if you don't know what you are doing
     port: 4317 # do not change if you don't know what you are doing
+
+  tempo_exporter:
+    name: tempo-service-exporter # do not change if you don't know what you are doing
+    port: 3200 # do not change if you don't know what you are doing
   
   grafanavk:
     name: grafana-service # do not change if you don't know what you are doing
@@ -14,10 +18,18 @@ ingresses:
   tempo:
     host: tempo.131.154.99.250.myip.cloud.infn.it # change this to your desired hostname
     port: 443 # external port where the service is exposed
-    mTLSEnabled: false
+    mTLSEnabled: true
+  
+  tempoExporter:
+    host: tempoexporter.131.154.99.250.myip.cloud.infn.it # change this to your desired hostname
+    port: 443 # external port where the service is exposed
+    auth_enabled: true
+    username: admin # change this to your desired username
+    password: password # change this to your desired password
   
   grafana:
     host: grafanavk.131.154.99.250.myip.cloud.infn.it # change this to your desired hostname
+    port: 80
 
 config:
   grafana:
@@ -40,9 +52,37 @@ config:
 
 auth:
   tempo:
-    mTLSEnabled: false
+    mTLSEnabled: true
     clientCA: |-
       -----BEGIN CERTIFICATE-----
+      MIIFEzCCAvugAwIBAgIUGivQCWx8ufKqYYwpbQwW4ISDZYUwDQYJKoZIhvcNAQEL
+      BQAwGTEXMBUGA1UEAwwOTXlDbGllbnRSb290Q0EwHhcNMjQwOTA1MDczMDI2WhcN
+      MzQwOTAzMDczMDI2WjAZMRcwFQYDVQQDDA5NeUNsaWVudFJvb3RDQTCCAiIwDQYJ
+      KoZIhvcNAQEBBQADggIPADCCAgoCggIBAM40xZ1fM2DW2G+w/MWynmILto2kIC2b
+      DlP3tS6IgVspyvnqoZIBmUM98+G6WiXbr0CUMkJ7GEy0RZpXHd5Il3Ub/RFnpGwi
+      XgM6sdiTn9lDsPjsbAolAAopBzv5qdMx5qbNQ8p799cm/dazPtL7mb1SVDlLhGog
+      zkv5pAhZzhYphgQs8qNNHvmGciiuU9g2dZMcHXQpoDjF93Tbzt9XBmfSb3EvlmDF
+      ZFI8CfPvcqZhtoSglAITPHsjkJaWYo+0JO6JA4b2Yp0I7Zp5dNEVS09dFPGO0ZWC
+      7jrzyM8vyO7QlNZWWXv/gk3HxgxYqtVWcdJyP/nl7bncV9Ig5Ds7/7zjz/CEUj5X
+      WXsYehPU2TU0KGDQOay43jsiKmtUfx79VbollvqRWPh82oM0S2CmCAopOz7IriFq
+      j8Nex7l7DgJRPGN7NFc15+7MMi9TqFdym9bNPVuD/0jtGUC/w5PFtLHFFhgi3R+K
+      WH1S1NBxVhC8/rsspoblcj8Hp1066VsdhUuzBMNWGZp2U8+SdlshVllAbW6B+Zmm
+      TMrXoVviZlWgSziowj+MjaazpbmXw11M6vjsS5oXTR26SHduMyTxYGlykjJimVjr
+      d/QCXDMeCaQ/y/JZLCjgSUSmPKTxOeGUwgfN54JglKZqxIz6oHmAvEeIDiMY+gPs
+      cmKTAjNSBpjnAgMBAAGjUzBRMB0GA1UdDgQWBBRIoS4+HlEn4Ji6a/toGog9ZD8t
+      rjAfBgNVHSMEGDAWgBRIoS4+HlEn4Ji6a/toGog9ZD8trjAPBgNVHRMBAf8EBTAD
+      AQH/MA0GCSqGSIb3DQEBCwUAA4ICAQDJ+551KKZ3luRZuhS/j9bF8lhSQ1imvg+6
+      vTSpl6Qxcm++7tS02mDgGD6cXEbDdxF0ZNa7xXSkrPeETzcRBVyEBFkjZh+RiYvn
+      pD8TKUdWW4TkobgFc5oWQ4Bd3xC6EPZVJDiNXfKjzYJq5qy4+IW7p2ik/2r0u1Tw
+      ivsVsLtzXgSrZaUf+mImUIGJFLelrGtcJdeGtcdJoj9RNWsEA+yHDPLv0FhrXMPX
+      rPa3ckaIbGx4MUJWjG/p45w7y4/K+2B2h5WgkzcovZDRFlbNn6CCOMCVilTKbr5X
+      GO7ynr0GTTd6gZGWH/1IRihPTt0tVvuwehxl392ywOc8bVkFGA+UstZHGMnFGgr6
+      /yAOPFPGgr35mM5yIs+hmQfgsrDifLaaN7e5FERadFanahEF81jWjJHg4e9p8GNo
+      s2quTeTFlycpsWhYowg4FkHOMpLs/rTQjd/i9/Oph6WyEvt8WK83hGmq3dTRZHKy
+      KKbjk3zkOpA8OncMu+1+hBUlXLYcuTF4fhQecP1TGuV5kUYEnCAEnNx/LVdEKsiE
+      iU1J/X0A7UsJAoTTJuk3w2okGljaFx8LW6fO/wF0YyapxfkQqR0LQk8HgOao3EAG
+      GnnRzZcHDmHFXWPcqEdIaDRVN/EzVFdyxpPigek143t9jYpN4JrsChdTfHC2kQ4Z
+      Wpf+XI/tKA==
       -----END CERTIFICATE-----
 
 maintainerEmail: "gibianch@pg.infn.it"

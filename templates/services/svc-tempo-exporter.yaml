@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.tempo_exporter.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - name: {{ .Values.services.tempo_exporter.name }}
+      port: {{ .Values.ingresses.tempoExporter.port }}
+      protocol: TCP
+      targetPort: {{ .Values.services.tempo_exporter.port }}
+  selector:
+    app: {{ .Values.app.name }}
+  type: ClusterIP
+status:
+  loadBalancer: {}

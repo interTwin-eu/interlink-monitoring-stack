@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.services.tempo.name }}
+  name: {{ .Values.services.tempo_collector.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   ports:
-    - name: {{ .Values.services.tempo.name }}
+    - name: {{ .Values.services.tempo_collector.name }}
       port: {{ .Values.ingresses.tempo.port }}
       protocol: TCP
-      targetPort: {{ .Values.services.tempo.port }}
+      targetPort: {{ .Values.services.tempo_collector.port }}
   selector:
     app: {{ .Values.app.name }}
   type: ClusterIP
