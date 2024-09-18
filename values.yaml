@@ -26,16 +26,17 @@ config:
     http_port: 3000 # do not change if you don't know what you are doing
     http_addr: 0.0.0.0 # do not change if you don't know what you are doing
 
-    # services_VK-InterLink:
-    #   - VK-InterLink-67271c82-d19b-41cf-b937-e7f5fcd7349d
+    servicesVKInterLink:
+      #- VK-InterLink-67271c82-d19b-41cf-b937-e7f5fcd7349d
+      - VK-InterLink-07E1F4F2-7064-4672-A5CD-F86D3895C096
 
-    # #services_InterLink-Plugin:
-    # #  - InterLink-Plugin-67271c82-d19b-41cf-b937-e7f5fcd7349d
+    #services_InterLink-Plugin:
+    # - InterLink-Plugin-67271c82-d19b-41cf-b937-e7f5fcd7349d
 
     # #services_Plugin:
     # #  - Plugin-67271c82-d19b-41cf-b937-e7f5fcd7349d
    
-    service_name: VK-InterLink-67271c82-d19b-41cf-b937-e7f5fcd7349d
+    #service_name: VK-InterLink-07E1F4F2-7064-4672-A5CD-F86D3895C096
 
 auth:
   tempo:
