@@ -58,6 +58,12 @@ spec:
             subPath: dashboardHTTP{{ $index }}.json
             readOnly: false
         {{- end }}
+        {{- range $index, $service := .Values.config.grafana.servicesInterLinkPlugin }}
+          - name: grafanadashboardhttpinterlinktoplugin{{ $index }}
+            mountPath: /etc/grafana/provisioning/dashboards/dashboardHTTPInterlinkToPlugin{{ $index }}.json
+            subPath: dashboardHTTPInterlinkToPlugin{{ $index }}.json
+            readOnly: false
+        {{- end }}
           - name: grafanadashboardk8s
             mountPath: /etc/grafana/provisioning/dashboards/dashboardK8S.json
             subPath: dashboardK8S.json
@@ -90,6 +96,11 @@ spec:
       - name: grafanadashboardhttp{{ $index }}
         configMap:
           name: grafanadashboardhttp{{ $index }}
+      {{- end }}
+      {{- range $index, $service := .Values.config.grafana.servicesInterLinkPlugin }}
+      - name: grafanadashboardhttpinterlinktoplugin{{ $index }}
+        configMap:
+          name: grafanadashboardhttpinterlinktoplugin{{ $index }}
       {{- end }}
       - name: grafanadashboardk8s
         configMap:

@@ -6179,6 +6179,3054 @@ data:
 ---
 {{- end }}
 
+{{- range $index, $service := .Values.config.grafana.servicesInterLinkPlugin }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafanadashboardhttpinterlinktoplugin{{ $index }}
+  namespace: {{ $.Release.Namespace }}   # Use $ to access the top-level context
+  labels:
+    grafana_dashboard: "{{ $index }}"
+data:
+  dashboardHTTPInterlinkToPlugin{{ $index }}.json: |
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 2,
+      "links": [],
+      "panels": [
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "dark-green",
+                "mode": "fixed"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": -1,
+                "barWidthFactor": 0.6,
+                "drawStyle": "bars",
+                "fillOpacity": 60,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 1,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Create HTTP Call (200)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 6
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "count"
+              ],
+              "fields": "/^Trace ID$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "text": {
+              "valueSize": 80
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "# Create HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "orange",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 6
+          },
+          "id": 3,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^Duration$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Avg Time Create HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "blue",
+                    "value": null
+                  },
+                  {
+                    "color": "semi-dark-blue",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 12,
+            "y": 6
+          },
+          "id": 4,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "stdDev"
+              ],
+              "fields": "/^Duration$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Std Time Create HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-purple",
+                    "value": null
+                  },
+                  {
+                    "color": "purple",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 18,
+            "y": 6
+          },
+          "id": 5,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "last"
+              ],
+              "fields": "/^Start time$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Last time Create HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 10
+          },
+          "id": 6,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Create HTTP Call (200)",
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "dark-green",
+                "mode": "fixed"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": -1,
+                "barWidthFactor": 0.6,
+                "drawStyle": "bars",
+                "fillOpacity": 61,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 16
+          },
+          "id": 7,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "DeleteAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"DeleteAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Delete HTTP Call (200)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 22
+          },
+          "id": 8,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "count"
+              ],
+              "fields": "/^Trace ID$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "text": {
+              "valueSize": 80
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ],
+                  "valueType": "int"
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "DeleteAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"DeleteAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "# Delete HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "orange"
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 22
+          },
+          "id": 9,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^Duration$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "DeleteAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"DeleteAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Avg Time Delete HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "blue"
+                  },
+                  {
+                    "color": "semi-dark-blue",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 12,
+            "y": 22
+          },
+          "id": 10,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "stdDev"
+              ],
+              "fields": "/^Duration$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "DeleteAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"DeleteAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Std Time Delete HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-purple"
+                  },
+                  {
+                    "color": "purple",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 18,
+            "y": 22
+          },
+          "id": 11,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "last"
+              ],
+              "fields": "/^Start time$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "DeleteAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"DeleteAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Last time Delete HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 26
+          },
+          "id": 12,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "DeleteAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"DeleteAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Delete HTTP Call (200)",
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "yellow",
+                "mode": "continuous-GrYlRd"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": -1,
+                "barWidthFactor": 0.6,
+                "drawStyle": "points",
+                "fillOpacity": 61,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 6,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 32
+          },
+          "id": 13,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Status HTTP Call (200)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 38
+          },
+          "id": 14,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "count"
+              ],
+              "fields": "/^Trace ID$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "text": {
+              "valueSize": 80
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "# Status HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "orange"
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 38
+          },
+          "id": 15,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^Duration$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Avg Time Status HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "blue"
+                  },
+                  {
+                    "color": "semi-dark-blue",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 12,
+            "y": 38
+          },
+          "id": 16,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "stdDev"
+              ],
+              "fields": "/^Duration$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Std Time Status HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-purple"
+                  },
+                  {
+                    "color": "purple",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 18,
+            "y": 38
+          },
+          "id": 17,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "last"
+              ],
+              "fields": "/^Start time$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Last time Status HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 42
+          },
+          "id": 23,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Status HTTP Call (200)",
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "dark-green",
+                "mode": "fixed"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": -1,
+                "barWidthFactor": 0.6,
+                "drawStyle": "bars",
+                "fillOpacity": 61,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 6,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 48
+          },
+          "id": 24,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "PingAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"PingAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Ping HTTP Call (200)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 54
+          },
+          "id": 25,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "PingAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Ping HTTP Call (200)",
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "dark-red",
+                "mode": "fixed"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": -1,
+                "barWidthFactor": 0.6,
+                "drawStyle": "bars",
+                "fillOpacity": 60,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 60
+          },
+          "id": 18,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "!=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code!=200 && resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Create HTTP Call (!200)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-red"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 66
+          },
+          "id": 19,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "count"
+              ],
+              "fields": "/^Trace ID$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "text": {
+              "valueSize": 80
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "!=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code!=200 && resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "# Create HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-red"
+                  },
+                  {
+                    "color": "dark-red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 66
+          },
+          "id": 20,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^Duration$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "text": {},
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "!=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code!=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceql",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Avg Time Create HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-red"
+                  },
+                  {
+                    "color": "dark-red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 12,
+            "y": 66
+          },
+          "id": 21,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "stdDev"
+              ],
+              "fields": "/^Duration$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "!=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Std Time Create HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "noValue": "0",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-red"
+                  },
+                  {
+                    "color": "dark-red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 18,
+            "y": 66
+          },
+          "id": 22,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "last"
+              ],
+              "fields": "/^Start time$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "value",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "!=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "StatusAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code!=200 && resource.service.name=\"{{ $service }}\" && name=\"StatusAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Last time Status HTTP Call",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 70
+          },
+          "id": 26,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "!=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "CreateAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code!=200 && resource.service.name=\"{{ $service }}\" && name=\"CreateAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Create HTTP Call (!200)",
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "dark-red",
+                "mode": "fixed"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": -1,
+                "barWidthFactor": 0.6,
+                "drawStyle": "bars",
+                "fillOpacity": 61,
+                "gradientMode": "hue",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-red"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 76
+          },
+          "id": 27,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "!=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ]
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "DeleteAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code!=200 && resource.service.name=\"{{ $service }}\" && name=\"DeleteAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "Delete HTTP Call (!200)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "tempo",
+            "uid": "1"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "dark-red"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 82
+          },
+          "id": 28,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "count"
+              ],
+              "fields": "/^Trace ID$/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "text": {
+              "valueSize": 80
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.2.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "tempo",
+                "uid": "1"
+              },
+              "filters": [
+                {
+                  "id": "650635ed",
+                  "operator": "!=",
+                  "scope": "span",
+                  "tag": "exit.code",
+                  "value": [
+                    "200"
+                  ],
+                  "valueType": "int"
+                },
+                {
+                  "id": "service-name",
+                  "operator": "=",
+                  "scope": "resource",
+                  "tag": "service.name",
+                  "value": [
+                    "{{ $service }}"
+                  ],
+                  "valueType": "string"
+                },
+                {
+                  "id": "span-name",
+                  "operator": "=",
+                  "scope": "span",
+                  "tag": "name",
+                  "value": [
+                    "DeleteAPI"
+                  ],
+                  "valueType": "string"
+                }
+              ],
+              "limit": 20,
+              "query": "{span.exit.code=200 && resource.service.name=\"{{ $service }}\" && name=\"DeleteAPI\"}",
+              "queryType": "traceqlSearch",
+              "refId": "A",
+              "tableType": "traces"
+            }
+          ],
+          "title": "# Delete HTTP Call",
+          "type": "stat"
+        }
+      ],
+      "refresh": "auto",
+      "schemaVersion": 39,
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "Dashboard-RESTAPI-{{ $service }}",
+      "version": 20,
+      "weekStart": ""
+    }
+---
+{{- end }}
+
+
 apiVersion: v1
 kind: ConfigMap
 metadata:

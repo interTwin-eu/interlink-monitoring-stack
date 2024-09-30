@@ -16,19 +16,19 @@ app:
 
 ingresses:
   tempo:
-    host: tempo.131.154.99.250.myip.cloud.infn.it # change this to your desired hostname
+    host: tempo.131.154.98.145.myip.cloud.infn.it # change this to your desired hostname
     port: 443 # external port where the service is exposed
     mTLSEnabled: true
   
   tempoExporter:
-    host: tempoexporter.131.154.99.250.myip.cloud.infn.it # change this to your desired hostname
+    host: tempoexporter.131.154.98.145.myip.cloud.infn.it # change this to your desired hostname
     port: 443 # external port where the service is exposed
     auth_enabled: true
     username: admin # change this to your desired username
     password: password # change this to your desired password
   
   grafana:
-    host: grafanavk.131.154.99.250.myip.cloud.infn.it # change this to your desired hostname
+    host: grafanavk.131.154.98.145.myip.cloud.infn.it # change this to your desired hostname
     port: 80
 
 config:
@@ -40,10 +40,10 @@ config:
 
     servicesVKInterLink:
       #- VK-InterLink-67271c82-d19b-41cf-b937-e7f5fcd7349d
-      - VK-InterLink-07E1F4F2-7064-4672-A5CD-F86D3895C096
+      - VK-InterLink-67271c82-d19b-41cf-b937-e7f5fcd7349d
 
-    #services_InterLink-Plugin:
-    # - InterLink-Plugin-67271c82-d19b-41cf-b937-e7f5fcd7349d
+    servicesInterLinkPlugin:
+      - InterLink-Plugin-588cf471-ed78-44e3-85ba-7d49d322e311
 
     # #services_Plugin:
     # #  - Plugin-67271c82-d19b-41cf-b937-e7f5fcd7349d
