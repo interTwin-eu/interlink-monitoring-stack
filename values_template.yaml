@@ -1,0 +1,65 @@
+services:
+  tempo_collector:
+    name: tempo-service # do not change if you don't know what you are doing
+    port: 4317 # do not change if you don't know what you are doing
+
+  tempo_exporter:
+    name: tempo-service-exporter # do not change if you don't know what you are doing
+    port: 3200 # do not change if you don't know what you are doing
+  
+  grafanavk:
+    name: grafana-service # do not change if you don't know what you are doing
+    port: 3000 # do not change if you don't know what you are doing
+
+app:
+  name: grafanavk
+
+ingresses:
+  tempo:
+    host: tempo.<public_ip>.myip.cloud.infn.it # change this to your desired hostname
+    port: 443 # external port where the service is exposed
+    mTLSEnabled: true
+  
+  tempoExporter:
+    host: tempoexporter.<public_ip>.myip.cloud.infn.it # change this to your desired hostname
+    port: 443 # external port where the service is exposed
+    auth_enabled: true
+    username: <tempoexporter_username> # change this to your desired username
+    password: <tempoexporter_password> # change this to your desired password
+  
+  grafana:
+    host: grafanavk.<public_ip>.myip.cloud.infn.it # change this to your desired hostname
+    port: 80
+
+config:
+  tempo:
+    s3:
+      bucket: <s3_bucketname>
+      endpoint: <s3_endpoint>
+      access_key: <s3_access_key>
+      secret_key: <s3_secret_key>
+      
+  grafana:
+    admin_user: <grafan_admin_auser> # change this to your desired username. This is the username you will use to login to Grafana
+    admin_password: <grafana_admin_password> # change this to your desired password. This is the password you will use to login to Grafana
+    http_port: 3000 # do not change if you don't know what you are doing
+    http_addr: 0.0.0.0 # do not change if you don't know what you are doing
+
+    # servicesVKInterLink:
+    #   - VK-InterLink-67271c82-d19b-41cf-b937-e7f5fcd7349d
+
+    # define here the dashboards you want to import in Grafana to visualize https requests from InterLink to Plugin
+    servicesInterLinkPlugin:
+      - InterLink-Plugin-588cf471-ed78-44e3-85ba-7d49d322e311
+
+    # define here the dashboards you want to import in Grafana to visualize https requests arriving to Plugin
+    servicesPlugin:
+      - Plugin-51f5918b-3c90-428d-a9c8-db5db9b0697c
+
+auth:
+  tempo:
+    mTLSEnabled: true
+    CA: |- 
+<ca_certificate>
+
+maintainerEmail: "gibianch@pg.infn.it"

@@ -30,7 +30,7 @@ data:
 
     compactor:
       compaction:
-        block_retention: 1h                
+        block_retention: 876000h # 168h                
 
     metrics_generator:
       registry:
@@ -42,9 +42,16 @@ data:
         path: /var/tempo/generator/traces
 
     storage:
+      # trace:
+      #   backend: local                     
+      #   wal:
+      #     path: /var/tempo/wal             
+      #   local:
+      #     path: /var/tempo/blocks
       trace:
-        backend: local                     
-        wal:
-          path: /var/tempo/wal             
-        local:
-          path: /var/tempo/blocks
+        backend: s3
+        s3:
+          bucket: {{ .Values.config.tempo.s3.bucket }}
+          endpoint: {{ .Values.config.tempo.s3.endpoint }}
+          access_key: {{ .Values.config.tempo.s3.access_key }}
+          secret_key: {{ .Values.config.tempo.s3.secret_key }}
