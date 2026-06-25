@@ -11,6 +11,10 @@ services:
     name: grafana-service # do not change if you don't know what you are doing
     port: 3000 # do not change if you don't know what you are doing
 
+  prometheus:
+    name: prometheus-service # do not change if you don't know what you are doing
+    port: 9090 # do not change if you don't know what you are doing
+
 app:
   name: grafanavk
 
@@ -58,7 +62,7 @@ config:
 
 auth:
   tempo:
-    mTLSEnabled: true
+    mTLSEnabled: false
     CA: |- 
 <ca_certificate>
 

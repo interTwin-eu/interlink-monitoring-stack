@@ -14793,6 +14793,13 @@ data:
               "name": "tempo",
               "type": "tempo",
               "url": "http://localhost:3200"
+            },
+            {
+              "uid":"2",
+              "name": "prometheus",
+              "type": "prometheus",
+              "url": "http://localhost:9090",
+              "isDefault": true
             }
         ]
     }
