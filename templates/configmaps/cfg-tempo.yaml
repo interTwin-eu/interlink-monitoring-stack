@@ -69,7 +69,11 @@ data:
       trace:
         pool:
           max_workers: 100
-          queue_depth: 100
+          # A trace-by-ID lookup enqueues one job per block in the blocklist, so
+          # queue_depth has to stay comfortably above the number of blocks or
+          # the lookup is rejected outright with "queue doesn't have room for N
+          # jobs". 10000 is the Tempo default.
+          queue_depth: 10000
         backend: s3
         s3:
           bucket: {{ .Values.config.tempo.s3.bucket }}
